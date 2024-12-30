@@ -8,7 +8,7 @@ import Spinner from '../Spinner/Spinner';
 
 const Login = () => {
     const [error, setError] = useState('');
-    const { logIn, logInWithGoogle, loading, setLoading } = useContext(AuthContext);
+    const { logIn, loading, setLoading } = useContext(AuthContext);
     const [userEmail, setUserEmail] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
@@ -36,39 +36,6 @@ const Login = () => {
                 setLoading(false);
             })
     }
-    const handleGoogleLogin = () => {
-        logInWithGoogle()
-            .then(r => {
-                const user = r.user;
-                console.log(user);
-                setError('');
-                if (user) {
-                    saveUser(user.displayName, user.email, 'Buyer');
-                    // setUserEmail(user.email);
-                }
-            })
-            .catch(e => {
-                console.log(e);
-                setError(e.message);
-                setLoading(false);
-            })
-    }
-
-    const saveUser = (name, email, accountType) => {
-        const user = { name, email, accountType };
-        fetch('https://next-rep-server.vercel.app/users', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                setUserEmail(user.email);
-            })
-    }
 
     useEffect(() => {
         if (userEmail) {
@@ -78,7 +45,6 @@ const Login = () => {
 
     return (
         <div className='min-h-screen'>
-            <Toaster />
             <h2 className='bg-secondary p-2 text-white text-center text-xl lg:text-2xl font-semibold uppercase'>Log In</h2>
             {
                 loading &&
